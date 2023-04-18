@@ -1,4 +1,4 @@
-name: Ruby linter
+name: Shared Ruby linter
 on:
   pull_request:
     types: [opened,synchronize]
@@ -8,7 +8,9 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  lint:
+  rubocop:
+    name: Shared Rubocop
+
     permissions:
       contents: read
       pull-requests: read
