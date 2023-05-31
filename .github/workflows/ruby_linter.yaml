@@ -1,4 +1,4 @@
-name: Shared Ruby linter
+name: Ruby linter
 on:
   pull_request:
     types: [opened,synchronize]
@@ -8,8 +8,26 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  fasterer:
+    name: Fasterer
+
+    permissions:
+      contents: read
+      pull-requests: read
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+      - name: Install Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+          ruby-version: .ruby-version
+      - name: Fasterer
+        run: bundle exec fasterer
+
   rubocop:
-    name: Shared Rubocop
+    name: Rubocop
 
     permissions:
       contents: read
