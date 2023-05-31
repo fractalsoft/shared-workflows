@@ -1,0 +1,35 @@
+name: Ruby reviewdog
+on:
+  pull_request:
+    types: [opened,synchronize]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  reek:
+    name: Reek
+
+    permissions:
+      contents: read
+      pull-requests: write
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+      - name: Install Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+          ruby-version: .ruby-version
+      - name: Reek
+        uses: reviewdog/action-reek@v1
+        with:
+          fail_on_error: true
+          filter_mode: diff_context
+          level: error
+          reek_version: gemfile
+          reporter: github-pr-check
